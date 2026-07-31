@@ -261,6 +261,31 @@ def generate_launch_description():
         output='screen',
         condition=UnlessCondition(use_fake_hardware),
     )
+    
+    # --- Servo (namespaced) ---
+    acceleration_filter_update_period = {"update_period": 0.01}
+    planning_group_name = {"planning_group_name": "fr3_arm"}
+                            
+    servo_yaml = load_yaml("franka_fr3_moveit_config", "config/fr3_servo_config.yaml")
+    servo_params = {"moveit_servo": servo_yaml}  # REQUIRED
+    servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node",
+        namespace=namespace,
+        parameters=[
+            servo_params,
+            acceleration_filter_update_period,
+            planning_group_name,
+            robot_description,
+            robot_description_semantic,
+            kinematics_config,
+            joint_limits_config
+        ],
+        output="screen",
+        #arguments=['--ros-args', '--log-level', 'debug'],   # optional for debugging
+    )
+    # ----------------------
+
 
     robot_arg = DeclareLaunchArgument(
         robot_ip_parameter_name,
@@ -273,12 +298,12 @@ def generate_launch_description():
     )
     load_gripper_arg = DeclareLaunchArgument(
         load_gripper_parameter_name,
-        default_value='true',
+        default_value='false',
         description='Whether to load the gripper or not (true or false)'
     )
     ee_id_arg = DeclareLaunchArgument(
         ee_id_parameter_name,
-        default_value='franka_hand',
+        default_value='none',
         description='The end-effector id to use. Available options: none, franka_hand, cobot_pump'
     )
     use_fake_hardware_arg = DeclareLaunchArgument(
@@ -311,7 +336,8 @@ def generate_launch_description():
          ros2_control_node,
          joint_state_publisher,
          franka_robot_state_broadcaster,
-         gripper_launch_file
+        #  gripper_launch_file,
+         servo_node,
          ]
         + load_controllers
     )
