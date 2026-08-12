@@ -21,14 +21,14 @@ from moveit_msgs.msg import (
 # --- fill these in ---
 TWIST_TOPIC = "/servo_node/delta_twist_cmds"
 JOY_TOPIC = "/joy"
-FRAME_ID = "base"
+FRAME_ID = "fr3_link0"
 PUBLISH_RATE = 100.0
 
 # button indices — VERIFY with `ros2 topic echo /joy`
 ENABLE_BUTTON = 4              # deadman (L1)
 HOME_BUTTON = 10
-START_COLLECT_BUTTON = 9
-STOP_COLLECT_BUTTON = 8
+START_COLLECT_BUTTON = 0
+STOP_COLLECT_BUTTON = 1
 
 # axis indices — VERIFY
 AXIS_LEFT_X = 0
@@ -53,7 +53,7 @@ JOINT_TOL = 0.01
 VEL_SCALE = 0.2               # home move velocity scaling (be conservative on hardware)
 ACC_SCALE = 0.2
 
-EE_LINK = "fr3_link8"      # VERIFY — with hand off, likely fr3_link8
+EE_LINK = "fr3_pusher_tcp"    # matches ee_id:=custom_pusher_ee
 POS_TOL = 0.01               # position sphere radius (m)
 ORI_TOL = 0.05               # orientation tolerance per axis (rad)
 TRIGGER_FLOOR = 0.02   # R2 must be pulled past this before any motion
@@ -118,7 +118,7 @@ class JoyToTwist(Node):
             return
         threading.Thread(target=self._home_sequence, daemon=True).start()
     def _home_pose(self):
-        pos = (0.4, 0.0, 0.17)
+        pos = (0.4, 0.0, 0.039)
         quat = (0.0, 1.0, 0.0, 0.0)   # [w, x, y, z]
         return pos, quat
 
