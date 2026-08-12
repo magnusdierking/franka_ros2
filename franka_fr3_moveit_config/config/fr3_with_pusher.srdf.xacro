@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+  Thin wrapper around franka_description's fr3.srdf.xacro that adds
+  disable_collisions entries for the custom pusher end effector
+  (see franka_bringup/urdf/franka_arm.urdf.xacro and
+  franka_vision_and_manipulation_kit/accessories/custom_pusher_ee.xacro).
+
+  franka_description's own SRDF is only self-collision-analyzed for its
+  built-in ee_id options (franka_hand, cobot_pump, ...), so links added by
+  custom_pusher_ee are checked against the whole robot by default and
+  falsely flag as "close to collision" at rest. Since the pusher is a thin,
+  light rod, self-collision checking against it is disabled outright here
+  (world/obstacle collision checking is untouched). This file leaves
+  franka_description's fr3.srdf.xacro itself unmodified (it's a vendored,
+  independently-versioned package) and is a pure passthrough when
+  ee_id != custom_pusher_ee.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="fr3">
+
+  <xacro:include filename="$(find franka_description)/robots/fr3/fr3.srdf.xacro"/>
+
+  <xacro:property name="_ee_id_val" value="$(arg ee_id)"/>
+  <xacro:if value="${_ee_id_val == 'custom_pusher_ee'}">
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_pusher_tip_visual_link" reason="Adjacent"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link0" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link1" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link2" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link3" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link4" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link5" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link6" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link7" reason="Adjacent"/>
+    <disable_collisions link1="fr3_pusher_link" link2="fr3_link8" reason="Adjacent"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link0" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link1" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link2" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link3" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link4" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link5" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link6" reason="Never"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link7" reason="Adjacent"/>
+    <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link8" reason="Adjacent"/>
+  </xacro:if>
+
+</robot>

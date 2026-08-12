@@ -89,8 +89,8 @@ def generate_launch_description():
         robot_description_config, value_type=str)}
 
     franka_semantic_xacro_file = os.path.join(
-        get_package_share_directory('franka_description'),
-        'robots', 'fr3', 'fr3.srdf.xacro'
+        get_package_share_directory('franka_fr3_moveit_config'),
+        'config', 'fr3_with_pusher.srdf.xacro'
     )
 
     robot_description_semantic_config = Command(
@@ -304,7 +304,8 @@ def generate_launch_description():
     ee_id_arg = DeclareLaunchArgument(
         ee_id_parameter_name,
         default_value='none',
-        description='The end-effector id to use. Available options: none, franka_hand, cobot_pump'
+        description='The end-effector id to use. Available options: '
+        'none, franka_hand, cobot_pump, custom_pusher_ee'
     )
     use_fake_hardware_arg = DeclareLaunchArgument(
         use_fake_hardware_parameter_name,
