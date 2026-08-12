@@ -1,0 +1,19 @@
+# Inertial properties for the custom 3D-printed pusher end effector.
+#
+# TODO: replace `mass` below with your real measured mass (kg), then recompute
+# `inertia.xx/yy/zz` using the slender-box approximation for a 0.02 x 0.02 x 0.125 m box:
+#   xx = yy = mass/12 * (0.02^2 + 0.125^2)
+#   zz        = mass/12 * (0.02^2 + 0.02^2)
+# The values below assume a placeholder mass of 15 g (0.015 kg).
+pusher:
+  origin:
+    xyz: 0 0 0.0625
+    rpy: 0 0 0
+  mass: 0.015
+  inertia:
+    xx: 2.003e-05
+    yy: 2.003e-05
+    zz: 1.0e-06
+    xy: 0
+    xz: 0
+    yz: 0

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+  <!--
+    Custom 3D-printed pusher end effector: a thin box "arm" bolted to the flange
+    with a small sphere tip, plus a massless TCP frame at the tip. Geometry mirrors
+    the MuJoCo sim model exactly (pusher body: box 0.02x0.02x0.125m; ee_frame: 0.015m
+    sphere at the box tip).
+  -->
+  <xacro:macro name="custom_pusher_ee" params="prefix parent inertials *origin">
+
+    <link name="${prefix}pusher_link" >
+      <visual>
+        <origin xyz="0 0 0.0625" rpy="0 0 0" />
+        <geometry>
+          <box size="0.02 0.02 0.125" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.0625" rpy="0 0 0" />
+        <geometry>
+          <box size="0.02 0.02 0.125" />
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="${inertials['pusher']['origin']['xyz']}" rpy="${inertials['pusher']['origin']['rpy']}" />
+        <mass value="${inertials['pusher']['mass']}" />
+        <inertia ixx="${inertials['pusher']['inertia']['xx']}"
+                 ixy="${inertials['pusher']['inertia']['xy']}"
+                 ixz="${inertials['pusher']['inertia']['xz']}"
+                 iyy="${inertials['pusher']['inertia']['yy']}"
+                 iyz="${inertials['pusher']['inertia']['yz']}"
+                 izz="${inertials['pusher']['inertia']['zz']}" />
+      </inertial>
+    </link>
+
+    <joint name="${prefix}pusher_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}" />
+      <child  link="${prefix}pusher_link" />
+    </joint>
+
+    <!-- Visual-only sphere at the tip of the box, matching the sim's black tip sphere -->
+    <link name="${prefix}pusher_tip_visual_link">
+      <visual>
+        <geometry>
+          <sphere radius="0.015" />
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}pusher_tip_visual_joint" type="fixed">
+      <origin xyz="0 0 0.125" rpy="0 0 0" />
+      <parent link="${prefix}pusher_link" />
+      <child  link="${prefix}pusher_tip_visual_link" />
+    </joint>
+
+    <!-- Massless TCP frame at the tip, matching the sim's ee_frame/ee_site -->
+    <link name="${prefix}pusher_tcp" />
+
+    <joint name="${prefix}pusher_tcp_joint" type="fixed">
+      <origin xyz="0 0 0.125" rpy="0 0 0" />
+      <parent link="${prefix}pusher_link" />
+      <child  link="${prefix}pusher_tcp" />
+    </joint>
+
+  </xacro:macro>
+
+</robot>
