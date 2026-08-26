@@ -305,7 +305,7 @@ def generate_launch_description():
         ee_id_parameter_name,
         default_value='none',
         description='The end-effector id to use. Available options: '
-        'none, franka_hand, cobot_pump, custom_pusher_ee'
+        'none, franka_hand, cobot_pump, custom_pusher_ee, custom_plate_ee'
     )
     use_fake_hardware_arg = DeclareLaunchArgument(
         use_fake_hardware_parameter_name,

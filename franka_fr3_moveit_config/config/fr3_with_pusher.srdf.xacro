@@ -42,4 +42,26 @@
     <disable_collisions link1="fr3_pusher_tip_visual_link" link2="fr3_link8" reason="Adjacent"/>
   </xacro:if>
 
+  <xacro:if value="${_ee_id_val == 'custom_plate_ee'}">
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_plate_link" reason="Adjacent"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link0" reason="Never"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link1" reason="Never"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link2" reason="Never"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link3" reason="Never"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link4" reason="Never"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link5" reason="Never"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link6" reason="Never"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link7" reason="Adjacent"/>
+    <disable_collisions link1="fr3_plate_mount_link" link2="fr3_link8" reason="Adjacent"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link0" reason="Never"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link1" reason="Never"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link2" reason="Never"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link3" reason="Never"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link4" reason="Never"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link5" reason="Never"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link6" reason="Never"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link7" reason="Adjacent"/>
+    <disable_collisions link1="fr3_plate_link" link2="fr3_link8" reason="Adjacent"/>
+  </xacro:if>
+
 </robot>

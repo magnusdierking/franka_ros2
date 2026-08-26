@@ -19,7 +19,7 @@
 # namespace: Namespace for the robot (default: '')
 # robot_ip: Hostname or IP address of the robot (default: '172.16.0.3')
 # load_gripper: Use Franka Gripper as an end-effector (default: 'false')
-# ee_id: The end-effector id to use, e.g. franka_hand, custom_pusher_ee (default: 'franka_hand')
+# ee_id: The end-effector id to use, e.g. franka_hand, custom_pusher_ee, custom_plate_ee (default: 'franka_hand')
 # use_fake_hardware: Use fake hardware (default: 'false')
 # fake_sensor_commands: Fake sensor commands (default: 'false')
 # joint_state_rate: Rate for joint state publishing in Hz (default: '30')
@@ -241,7 +241,7 @@ def generate_launch_description():
             'ee_id',
             default_value='franka_hand',
             description='The end-effector id to use. Available options: '
-            'none, franka_hand, cobot_pump, custom_pusher_ee',
+            'none, franka_hand, cobot_pump, custom_pusher_ee, custom_plate_ee',
         ),
         DeclareLaunchArgument(
             'use_fake_hardware', default_value='false', description='Use fake hardware'

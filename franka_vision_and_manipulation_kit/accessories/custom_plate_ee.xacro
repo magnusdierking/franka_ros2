@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+  <!--
+    Custom 3D-printed balancing plate end effector: a short mount stick from
+    the flange to a tilted rectangular tray, plus a massless TCP frame at the
+    tray's own origin. Geometry mirrors the MuJoCo sim model exactly (mount:
+    cylinder r=0.018m L=0.05m; plate: box 0.39x0.5x0.0085m tilted -43deg (yaw)
+    relative to the mount, offset 0.05425m along the mount's z-axis).
+  -->
+  <xacro:macro name="custom_plate_ee" params="prefix parent inertials *origin">
+
+    <link name="${prefix}plate_mount_link" >
+      <visual><origin xyz="0 0 0.025" rpy="0 0 0"/><geometry><cylinder radius="0.018" length="0.05"/></geometry></visual>
+      <collision><origin xyz="0 0 0.025" rpy="0 0 0"/><geometry><cylinder radius="0.018" length="0.05"/></geometry></collision>
+      <inertial>
+        <origin xyz="${inertials['plate_mount']['origin']['xyz']}" rpy="${inertials['plate_mount']['origin']['rpy']}" />
+        <mass value="${inertials['plate_mount']['mass']}" />
+        <inertia ixx="${inertials['plate_mount']['inertia']['xx']}" ixy="${inertials['plate_mount']['inertia']['xy']}"
+                 ixz="${inertials['plate_mount']['inertia']['xz']}" iyy="${inertials['plate_mount']['inertia']['yy']}"
+                 iyz="${inertials['plate_mount']['inertia']['yz']}" izz="${inertials['plate_mount']['inertia']['zz']}" />
+      </inertial>
+    </link>
+
+    <joint name="${prefix}plate_mount_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}" />
+      <child  link="${prefix}plate_mount_link" />
+    </joint>
+
+    <link name="${prefix}plate_link" >
+      <visual><origin xyz="0 0 0" rpy="0 0 0"/><geometry><box size="0.39 0.5 0.0085"/></geometry></visual>
+      <collision><origin xyz="0 0 0" rpy="0 0 0"/><geometry><box size="0.39 0.5 0.0085"/></geometry></collision>
+      <inertial>
+        <origin xyz="${inertials['plate']['origin']['xyz']}" rpy="${inertials['plate']['origin']['rpy']}" />
+        <mass value="${inertials['plate']['mass']}" />
+        <inertia ixx="${inertials['plate']['inertia']['xx']}" ixy="${inertials['plate']['inertia']['xy']}"
+                 ixz="${inertials['plate']['inertia']['xz']}" iyy="${inertials['plate']['inertia']['yy']}"
+                 iyz="${inertials['plate']['inertia']['yz']}" izz="${inertials['plate']['inertia']['zz']}" />
+      </inertial>
+    </link>
+
+    <joint name="${prefix}plate_joint" type="fixed">
+      <origin xyz="0 0 0.05425" rpy="0 0 -0.750491" />
+      <parent link="${prefix}plate_mount_link" />
+      <child  link="${prefix}plate_link" />
+    </joint>
+
+    <!-- Massless TCP frame at the plate's own origin, matching the sim's ee_frame/ee_site -->
+    <link name="${prefix}plate_tcp" />
+    <joint name="${prefix}plate_tcp_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${prefix}plate_link" />
+      <child  link="${prefix}plate_tcp" />
+    </joint>
+
+  </xacro:macro>
+</robot>

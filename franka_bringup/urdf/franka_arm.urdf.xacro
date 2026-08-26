@@ -27,6 +27,17 @@
     </xacro:custom_pusher_ee>
   </xacro:if>
 
+  <!-- Custom plate end effector (selected via ee_id:=custom_plate_ee hand:=false) -->
+  <xacro:include filename="$(find franka_vision_and_manipulation_kit)/accessories/custom_plate_ee.xacro"/>
+  <xacro:if value="${_ee_id_val == 'custom_plate_ee'}">
+    <xacro:custom_plate_ee
+        prefix="${modified_prefix}$(arg robot_type)_"
+        parent="${modified_prefix}$(arg robot_type)_link8"
+        inertials="${xacro.load_yaml('$(find franka_vision_and_manipulation_kit)/accessories/custom_plate_ee_inertials.yaml')}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:custom_plate_ee>
+  </xacro:if>
+
   <!-- ros2_control-specific arguments (not declared by description) -->
   <xacro:arg name="robot_ip" default=""/>
   <xacro:arg name="use_fake_hardware" default="false"/>

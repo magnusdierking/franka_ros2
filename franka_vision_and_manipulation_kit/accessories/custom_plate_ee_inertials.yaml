@@ -1,0 +1,12 @@
+# Inertial properties for the custom 3D-printed balancing plate end effector.
+# Derived analytically from solid-primitive approximations of the MuJoCo sim
+# geometry (mount: cylinder r=0.018m L=0.05m m=0.0125kg; plate: box
+# 0.39x0.5x0.0085m m=1.0kg). Replace with measured values if available.
+plate_mount:
+  origin: { xyz: 0 0 0.025, rpy: 0 0 0 }
+  mass: 0.0125
+  inertia: { xx: 3.616667e-06, yy: 3.616667e-06, zz: 2.025000e-06, xy: 0, xz: 0, yz: 0 }
+plate:
+  origin: { xyz: 0 0 0, rpy: 0 0 0 }
+  mass: 1.0
+  inertia: { xx: 2.083935e-02, yy: 1.268102e-02, zz: 3.350833e-02, xy: 0, xz: 0, yz: 0 }
