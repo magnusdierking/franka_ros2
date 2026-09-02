@@ -257,17 +257,28 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         namespace=namespace,
-        arguments=['franka_robot_state_broadcaster'],
+        arguments=[
+            'franka_robot_state_broadcaster',
+            '--controller-manager-timeout', '60',
+            '--controller-manager',
+            PathJoinSubstitution([namespace, 'controller_manager'])
+        ],
         output='screen',
         condition=UnlessCondition(use_fake_hardware),
     )
     
     # --- Servo (namespaced) ---
-    acceleration_filter_update_period = {"update_period": 0.01}
-    planning_group_name = {"planning_group_name": "fr3_arm"}
-                            
     servo_yaml = load_yaml("franka_fr3_moveit_config", "config/fr3_servo_config.yaml")
     servo_params = {"moveit_servo": servo_yaml}  # REQUIRED
+
+    # AccelerationLimitedPlugin's internal QP treats update_period as a fixed time-step
+    # between doSmoothing() calls, but doSmoothing() is actually invoked once per Servo
+    # cycle - i.e. every publish_period. These must match, or the plugin's internal
+    # position/velocity tracking drifts out of sync with the real elapsed time between
+    # calls, which compounds over time into command jumps large enough to trip libfranka's
+    # reflex (joint_motion_generator_acceleration_discontinuity).
+    acceleration_filter_update_period = {"update_period": servo_yaml["publish_period"]}
+    planning_group_name = {"planning_group_name": "fr3_arm"}
     servo_node = Node(
         package="moveit_servo",
         executable="servo_node",
